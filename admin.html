@@ -203,8 +203,8 @@ select option{background:var(--card);}
 
 <script>
 // ═══ SUPABASE — REPLACE WITH YOUR OWN PROJECT CREDENTIALS (see SETUP.md) ═══
-var SB_URL = sb_publishable_XOzUt4IvLqO1B17OBcSN6w_0kOMOwQT;
-var SB_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbmh6amVldXZsd3l0d3lubG1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNjM0OTEsImV4cCI6MjEwNTkzOTQ5MX0.n77wsskoBcBZfjUXR91wrakU82zgfcM6o4JFKPzd344;
+var SB_URL = 'https://denhzjeeuvlwytwynlmd.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbmh6amVldXZsd3l0d3lubG1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNjM0OTEsImV4cCI6MjEwNTkzOTQ5MX0.n77wsskoBcBZfjUXR91wrakU82zgfcM6o4JFKPzd344';
 var _db = null;
 function getDB() {
   if (!_db && window.supabase && SB_URL.indexOf('YOUR_') !== 0) _db = window.supabase.createClient(SB_URL, SB_KEY);
