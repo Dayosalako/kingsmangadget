@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shop laptops, desktops, phones and accessories at Kingsman Modern Gadgets.">
+<title>Shop | Kingsman Modern Gadgets</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0D12'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23D3A24C' font-family='Georgia,serif'%3EK%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --bg:#0B0D12;--bg2:#12151C;--card:#171B24;--el:#1E2430;
+  --gold:#D3A24C;--gg:rgba(211,162,76,0.22);--gd:rgba(211,162,76,0.55);
+  --text:#F1EFEA;--text2:#9BA3AF;--muted:#5B6472;
+  --green:#3DDC84;--red:#F0554A;--amber:#F0A83B;
+  --br:rgba(211,162,76,0.13);--brh:rgba(211,162,76,0.32);
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;--disp:'Sora','Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.wrap{width:92%;max-width:1280px;margin:0 auto;}
+a{color:inherit;}
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--br);padding:8px 0;font-size:0.76rem;}
+.topbar-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.tb-info{display:flex;align-items:center;gap:18px;}
+.tb-item{display:flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;white-space:nowrap;}
+.tb-item i{color:var(--gold);font-size:0.78rem;}
+.theme-btn{background:none;border:1px solid var(--br);border-radius:20px;color:var(--text2);font-size:0.78rem;cursor:pointer;padding:4px 11px;display:flex;align-items:center;gap:5px;transition:all .2s;}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* HEADER */
+.header{background:rgba(11,13,18,0.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:999;}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(150deg,var(--gold),#8a6423);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;color:#0B0D12;font-size:1.1rem;flex-shrink:0;}
+.logo-name{font-family:var(--disp);font-size:1.18rem;font-weight:700;color:var(--text);line-height:1.1;}
+.logo-sub{font-size:0.62rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+nav ul{display:flex;list-style:none;gap:22px;align-items:center;}
+nav ul a{font-size:0.86rem;font-weight:500;color:var(--text2);text-decoration:none;transition:color .2s;position:relative;padding:4px 0;}
+nav ul a.active,nav ul a:hover{color:var(--gold);}
+.nav-actions{display:flex;align-items:center;gap:10px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:6px;font-size:0.84rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .25s;border:none;}
+.btn-p{background:var(--gold);color:#1A1305;box-shadow:0 0 0 rgba(0,0,0,0);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 26px var(--gg);}
+.btn-o{background:transparent;color:var(--gold);border:1px solid var(--gold);}
+.btn-o:hover{background:var(--gold);color:#1A1305;}
+.btn-g{background:#25D366;color:#fff;}
+.btn-g:hover{background:#1ebe5a;}
+.btn-sm{padding:8px 15px;font-size:0.78rem;}
+.menu-btn{display:none;background:none;border:1px solid var(--br);color:var(--text);padding:8px 12px;cursor:pointer;border-radius:6px;font-size:1rem;}
+/* LIGHT MODE */
+body.light{--bg:#F7F5F1;--bg2:#EFEBE3;--card:#FFFFFF;--el:#EFEBE3;--text:#20180C;--text2:#5A5140;--muted:#8C826E;--br:rgba(150,110,40,0.18);--brh:rgba(150,110,40,0.4);}
+body.light .header{background:rgba(247,245,241,0.92)!important;}
+body.light .hero{background:linear-gradient(135deg,#EFE7D8,#F7F5F1)!important;}
+body.light .prod-card,body.light .filter-wrap,body.light .filter-search input,body.light .fsel,body.light .qv-box{background:var(--card);}
+body.light .logo-mark{color:#fff;}
+/* HERO */
+.hero{background:linear-gradient(150deg,#0B0D12 0%,#171310 55%,#12151C 100%);padding:44px 0 30px;border-bottom:1px solid var(--br);position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;top:-110px;right:-90px;width:420px;height:420px;background:radial-gradient(circle,var(--gg),transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-family:var(--mono);font-size:0.72rem;color:var(--gold);letter-spacing:2px;margin-bottom:10px;}
+.hero h1{font-family:var(--disp);font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:700;margin-bottom:8px;}
+.hero p{color:var(--text2);font-size:0.94rem;max-width:520px;}
+/* FILTER */
+.filter-wrap{padding:16px 0;border-bottom:1px solid var(--br);position:sticky;top:71px;z-index:150;background:var(--bg);}
+.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.filter-search{flex:1;min-width:180px;position:relative;}
+.filter-search input{width:100%;padding:10px 13px 10px 38px;background:var(--card);border:1px solid var(--br);border-radius:6px;color:var(--text);font-size:0.88rem;outline:none;transition:border-color .2s;}
+.filter-search input:focus{border-color:var(--gold);}
+.filter-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.82rem;}
+.fsel{padding:10px 12px;background:var(--card);border:1px solid var(--br);border-radius:6px;color:var(--text);font-size:0.82rem;outline:none;cursor:pointer;min-width:135px;}
+.fsel:focus{border-color:var(--gold);}
+.chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-size:0.76rem;padding:7px 14px;border-radius:20px;border:1px solid var(--br);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
+.chip:hover,.chip.active{background:var(--gold);color:#1A1305;border-color:var(--gold);font-weight:600;}
+.res-count{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-left:auto;white-space:nowrap;}
+.cat-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-top:12px;}
+.cat-strip::-webkit-scrollbar{display:none;}
+.cchip{flex-shrink:0;font-size:0.78rem;padding:6px 15px;border-radius:6px;border:1px solid var(--br);background:var(--card);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.cchip.active,.cchip:hover{border-color:var(--gold);color:var(--gold);}
+/* PRODUCTS */
+.products-sec{padding:30px 0 68px;}
+.loading-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.loading-state i{font-size:2rem;display:block;margin-bottom:12px;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.prod-card{background:var(--card);border:1px solid var(--br);border-radius:10px;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;}
+.prod-card:hover{transform:translateY(-4px);border-color:var(--brh);box-shadow:0 10px 30px rgba(0,0,0,0.25);}
+.prod-card.oos{opacity:0.6;}
+.img-carousel{position:relative;width:100%;height:190px;background:var(--el);overflow:hidden;}
+.img-carousel img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;top:0;left:0;}
+.img-carousel img.active{display:block;}
+.img-carousel .no-img{display:flex;align-items:center;justify-content:center;height:100%;color:var(--brh);font-size:3rem;}
+.carousel-nav{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:2;}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;border:none;padding:0;transition:all .2s;}
+.carousel-dot.active{background:#fff;width:14px;border-radius:3px;}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.72rem;z-index:2;}
+.carousel-arrow.prev{left:8px;}.carousel-arrow.next{right:8px;}
+.prod-badge{position:absolute;top:10px;left:10px;padding:3px 9px;border-radius:4px;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;z-index:2;}
+.b-new{background:var(--gold);color:#1A1305;}
+.b-used{background:var(--amber);color:#1A1305;}
+.b-refurb{background:#7C5CBF;color:#fff;}
+.b-hot{background:#ff4d4d;color:#fff;}
+.cat-tag{position:absolute;top:10px;right:10px;background:rgba(11,13,18,0.7);color:var(--text2);font-size:0.62rem;padding:3px 8px;border-radius:4px;z-index:2;}
+.stock-dot{position:absolute;bottom:10px;right:10px;width:9px;height:9px;border-radius:50%;z-index:2;}
+.dot-in{background:var(--green);box-shadow:0 0 7px rgba(61,220,132,0.6);}
+.dot-out{background:var(--red);}
+.sold-overlay{position:absolute;inset:0;background:rgba(11,13,18,0.55);display:flex;align-items:center;justify-content:center;z-index:1;}
+.sold-tag{background:var(--red);color:#fff;padding:6px 16px;border-radius:4px;font-weight:700;font-size:0.78rem;letter-spacing:1px;transform:rotate(-6deg);}
+.prod-body{padding:15px 16px 16px;}
+.prod-brand{font-family:var(--mono);font-size:0.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.prod-name{font-family:var(--disp);font-size:0.95rem;font-weight:600;margin-bottom:7px;line-height:1.35;min-height:2.6em;}
+.prod-specs{margin-bottom:10px;}
+.spec-row{font-size:0.75rem;color:var(--text2);display:flex;align-items:flex-start;gap:6px;margin-bottom:2px;}
+.spec-row i{color:var(--gold);font-size:0.6rem;margin-top:5px;}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.prod-price{font-family:var(--mono);font-size:1.02rem;font-weight:700;color:var(--gold);}
+.old-price{font-family:var(--mono);font-size:0.74rem;color:var(--muted);text-decoration:line-through;margin-left:6px;}
+.img-count{font-size:0.65rem;color:var(--muted);}
+.prod-actions{display:flex;gap:8px;}
+.prod-actions .btn{flex:1;justify-content:center;}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state i{font-size:2.4rem;margin-bottom:14px;display:block;color:var(--brh);}
+/* MODAL - ORDER */
+.modal-overlay{position:fixed;inset:0;background:rgba(11,13,18,0.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;visibility:hidden;transition:all .25s;padding:20px;}
+.modal-overlay.open{opacity:1;visibility:visible;}
+.modal-box{background:var(--card);border:1px solid var(--brh);border-radius:12px;padding:26px;max-width:460px;width:100%;max-height:88vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--el);border:none;color:var(--text2);width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{color:var(--gold);}
+.modal-prod{display:flex;gap:12px;align-items:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--br);}
+.modal-thumb{width:58px;height:58px;border-radius:6px;background:var(--el);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--gold);overflow:hidden;flex-shrink:0;}
+.modal-thumb img{width:100%;height:100%;object-fit:cover;}
+.modal-prod h4{font-family:var(--disp);font-size:0.98rem;margin-bottom:3px;}
+.modal-prod .mp-price{font-family:var(--mono);color:var(--gold);font-size:0.92rem;font-weight:700;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:5px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:9px 12px;background:var(--el);border:1px solid var(--br);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:0.87rem;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--gold);}
+.fg textarea{resize:vertical;min-height:64px;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.r2{grid-template-columns:1fr;}}
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0 12px;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--br);}
+.order-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.order-btns .btn{flex:1;justify-content:center;min-width:150px;}
+/* QUICK VIEW */
+.qv-overlay{position:fixed;inset:0;background:rgba(11,13,18,0.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:2100;opacity:0;visibility:hidden;transition:all .25s;padding:20px;}
+.qv-overlay.open{opacity:1;visibility:visible;}
+.qv-box{background:var(--card);border:1px solid var(--brh);border-radius:12px;max-width:820px;width:100%;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;position:relative;}
+@media(max-width:680px){.qv-box{grid-template-columns:1fr;}}
+.qv-close{position:absolute;top:12px;right:12px;background:rgba(11,13,18,0.6);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;}
+.qv-media{background:var(--el);}
+.qv-main{position:relative;width:100%;height:320px;cursor:zoom-in;}
+.qv-main img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;display:none;}
+.qv-main img.active{display:block;}
+.qv-main .no-img{display:flex;align-items:center;justify-content:center;height:100%;color:var(--brh);font-size:4rem;}
+.qv-main-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;z-index:2;}
+.qv-main-arrow.prev{left:10px;}.qv-main-arrow.next{right:10px;}
+.qv-zoom-hint{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.55);color:#fff;font-size:0.65rem;padding:4px 8px;border-radius:4px;}
+.qv-thumbs{display:flex;gap:6px;padding:10px;flex-wrap:wrap;}
+.qv-thumb{width:48px;height:40px;border-radius:4px;overflow:hidden;cursor:pointer;border:2px solid transparent;opacity:0.6;}
+.qv-thumb.active{border-color:var(--gold);opacity:1;}
+.qv-thumb img{width:100%;height:100%;object-fit:cover;}
+.qv-info{padding:26px;}
+.qv-badges{display:flex;gap:6px;margin-bottom:12px;}
+.qv-badges .prod-badge{position:static;}
+.qv-brand{font-family:var(--mono);font-size:0.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.qv-name{font-family:var(--disp);font-size:1.25rem;font-weight:700;margin-bottom:10px;}
+.qv-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
+.qv-price{font-family:var(--mono);font-size:1.4rem;font-weight:700;color:var(--gold);}
+.qv-old-price{font-family:var(--mono);color:var(--muted);text-decoration:line-through;font-size:0.9rem;}
+.qv-stock{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;padding:4px 10px;border-radius:20px;margin-bottom:16px;}
+.qv-stock.in{background:rgba(61,220,132,0.12);color:var(--green);}
+.qv-stock.out{background:rgba(240,85,74,0.12);color:var(--red);}
+.qv-sec-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:8px;}
+.qv-specs{margin-bottom:18px;}
+.qv-spec-row{font-size:0.85rem;color:var(--text2);display:flex;gap:8px;margin-bottom:5px;}
+.qv-spec-row i{color:var(--gold);margin-top:3px;}
+.qv-actions{display:flex;gap:10px;flex-wrap:wrap;}
+/* LIGHTBOX */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;z-index:2300;opacity:0;visibility:hidden;transition:all .2s;}
+.lb-overlay.open{opacity:1;visibility:visible;}
+.lb-overlay img{max-width:88%;max-height:88%;object-fit:contain;}
+.lb-close{position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+.lb-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;}
+.lb-arrow.prev{left:24px;}.lb-arrow.next{right:24px;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--brh);border-radius:8px;padding:13px 20px;font-size:0.85rem;z-index:3000;transition:transform .3s;box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+/* FOOTER */
+.footer{background:var(--bg2);border-top:1px solid var(--br);padding:36px 0 20px;margin-top:0;}
+.footer-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:0.83rem;color:var(--text2);}
+.footer-brand{display:flex;align-items:center;gap:8px;font-family:var(--disp);color:var(--text);font-weight:700;}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap;}
+.footer-links a{color:var(--text2);text-decoration:none;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{text-align:center;font-size:0.72rem;color:var(--muted);margin-top:22px;padding-top:16px;border-top:1px solid var(--br);}
+/* MOBILE NAV */
+@media(max-width:860px){
+  nav{position:fixed;top:0;right:-100%;width:78%;max-width:320px;height:100vh;background:var(--bg2);flex-direction:column;padding:80px 24px 24px;transition:right .3s;z-index:1000;border-left:1px solid var(--br);}
+  nav.open{right:0;}
+  nav ul{flex-direction:column;align-items:flex-start;gap:4px;width:100%;}
+  nav ul a{padding:12px 0;width:100%;border-bottom:1px solid var(--br);}
+  .menu-btn{display:block;}
+  .nav-actions .btn-o{display:none;}
+  .tb-info{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="tb-info">
+      <a class="tb-item" href="tel:+2348000000000"><i class="fas fa-phone"></i> +234 800 000 0000</a>
+      <a class="tb-item" href="mailto:sales@kingsmangadgets.com"><i class="fas fa-envelope"></i> sales@kingsmangadgets.com</a>
+      <span class="tb-item"><i class="fas fa-location-dot"></i> Abuja, Nigeria</span>
+    </div>
+    <button class="theme-btn" id="themeBtn"><i class="fas fa-sun" id="themeIcon"></i> <span>Theme</span></button>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap nav-wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">K</div>
+      <div><div class="logo-name">Kingsman</div><div class="logo-sub">Modern Gadgets</div></div>
+    </a>
+    <nav id="navMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="store.html" class="active">Shop</a></li>
+        <li><a href="index.html#categories">Categories</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a href="https://wa.me/2348000000000" target="_blank" class="btn btn-g btn-sm"><i class="fab fa-whatsapp"></i> Chat With Us</a>
+      <button class="menu-btn" id="menuBtn"><i class="fas fa-bars" id="menuIcon"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">Full Catalog</div>
+    <h1>Shop laptops, desktops, phones &amp; accessories</h1>
+    <p>Genuine devices, honest condition grading, and prices that don't move once you're in the checkout chat. Filter by category, brand or budget below.</p>
+  </div>
+</section>
+
+<div class="filter-wrap">
+  <div class="wrap">
+    <div class="filter-bar">
+      <div class="filter-search"><i class="fas fa-magnifying-glass"></i><input type="text" id="searchInput" placeholder="Search products, brands, specs..." oninput="doFilter()"></div>
+      <select class="fsel" id="brandFilter" onchange="doFilter()"><option value="">All Brands</option></select>
+      <select class="fsel" id="priceFilter" onchange="doFilter()">
+        <option value="">Any Price</option>
+        <option value="0-100000">Under ₦100,000</option>
+        <option value="100000-300000">₦100,000 – ₦300,000</option>
+        <option value="300000-600000">₦300,000 – ₦600,000</option>
+        <option value="600000-1200000">₦600,000 – ₦1,200,000</option>
+        <option value="1200000-999999999">Above ₦1,200,000</option>
+      </select>
+      <div class="chips">
+        <button class="chip active" data-cond="" onclick="setCond(this,'')">All Condition</button>
+        <button class="chip" data-cond="new" onclick="setCond(this,'new')">Brand New</button>
+        <button class="chip" data-cond="uk-used" onclick="setCond(this,'uk-used')">UK Used</button>
+        <button class="chip" data-cond="refurb" onclick="setCond(this,'refurb')">Refurbished</button>
+      </div>
+      <span class="res-count" id="resCount">Loading...</span>
+    </div>
+    <div class="cat-strip" id="catStrip">
+      <button class="cchip active" data-cat="" onclick="setCat(this,'')">All Categories</button>
+      <button class="cchip" data-cat="Laptops" onclick="setCat(this,'Laptops')"><i class="fas fa-laptop"></i> Laptops</button>
+      <button class="cchip" data-cat="Desktops & PCs" onclick="setCat(this,'Desktops & PCs')"><i class="fas fa-desktop"></i> Desktops &amp; PCs</button>
+      <button class="cchip" data-cat="Phones" onclick="setCat(this,'Phones')"><i class="fas fa-mobile-screen"></i> Phones</button>
+      <button class="cchip" data-cat="Accessories" onclick="setCat(this,'Accessories')"><i class="fas fa-headphones"></i> Accessories</button>
+    </div>
+  </div>
+</div>
+
+<section class="products-sec">
+  <div class="wrap">
+    <div class="loading-state" id="loadingState"><i class="fas fa-circle-notch"></i>Loading products...</div>
+    <div class="prod-grid" id="prodGrid" style="display:none;"></div>
+    <div class="empty-state" id="noResults" style="display:none;"><i class="fas fa-box-open"></i><p>No products match your filters. Try clearing them.</p></div>
+  </div>
+</section>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-prod">
+      <div class="modal-thumb" id="modalThumb"><i class="fas fa-cube"></i></div>
+      <div><h4 id="modalName"></h4><div class="mp-price" id="modalPrice"></div></div>
+    </div>
+    <div class="r2">
+      <div class="fg"><label>Full Name</label><input id="ord-name" placeholder="Your name"></div>
+      <div class="fg"><label>Phone Number</label><input id="ord-phone" placeholder="080..."></div>
+    </div>
+    <div class="fg"><label>Email Address</label><input type="email" id="ord-email" placeholder="your@email.com"></div>
+    <div class="fg"><label>Delivery Address</label><input id="ord-addr" placeholder="Where should we deliver?"></div>
+    <div class="r2">
+      <div class="fg"><label>Payment Method</label>
+        <select id="ord-pay"><option>Bank Transfer</option><option>Cash on Pickup</option><option>POS on Delivery</option><option>Installment (discuss)</option></select>
+      </div>
+      <div class="fg"><label>Pickup or Delivery</label>
+        <select id="ord-del"><option>Delivery (Abuja)</option><option>Nationwide Delivery</option><option>Pickup from Office</option></select>
+      </div>
+    </div>
+    <div class="fg"><label>Additional Notes</label><textarea id="ord-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="divider"><span>choose how to send</span></div>
+    <div class="order-btns">
+      <a id="waBtn" href="#" target="_blank" class="btn btn-g btn-sm"><i class="fab fa-whatsapp"></i> Order via WhatsApp</a>
+      <button class="btn btn-p btn-sm" onclick="emailOrder()"><i class="fas fa-envelope"></i> Send by Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+<div class="qv-overlay" id="qvModal">
+  <div class="qv-box">
+    <button class="qv-close" onclick="closeQuickView()"><i class="fas fa-times"></i></button>
+    <div class="qv-media">
+      <div class="qv-main" id="qvMain" onclick="openLightbox()"></div>
+      <div class="qv-thumbs" id="qvThumbs"></div>
+    </div>
+    <div class="qv-info">
+      <div class="qv-badges" id="qvBadges"></div>
+      <div class="qv-brand" id="qvBrand"></div>
+      <div class="qv-name" id="qvName"></div>
+      <div class="qv-price-row"><span class="qv-price" id="qvPrice"></span><span class="qv-old-price" id="qvOldPrice"></span></div>
+      <span class="qv-stock" id="qvStock"></span>
+      <div class="qv-sec-title">Specifications</div>
+      <div class="qv-specs" id="qvSpecs"></div>
+      <div class="qv-actions" id="qvActions"></div>
+    </div>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lbOverlay">
+  <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+  <button class="lb-arrow prev" id="lbPrev" onclick="lbNav(-1)"><i class="fas fa-chevron-left"></i></button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-arrow next" id="lbNext" onclick="lbNav(1)"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle" id="t-icon" style="color:var(--green);margin-right:7px;"></i><span id="t-msg"></span></div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-brand"><div class="logo-mark" style="width:30px;height:30px;font-size:0.9rem;">K</div> Kingsman Modern Gadgets</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="store.html">Shop</a>
+        <a href="https://wa.me/2348000000000" target="_blank">WhatsApp</a>
+        <a href="mailto:sales@kingsmangadgets.com">Email Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; <span id="yr"></span> Kingsman Modern Gadgets. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// ═══ SUPABASE — REPLACE WITH YOUR OWN PROJECT CREDENTIALS ═══
+var SB_URL = sb_publishable_XOzUt4IvLqO1B17OBcSN6w_0kOMOwQT;
+var SB_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbmh6amVldXZsd3l0d3lubG1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNjM0OTEsImV4cCI6MjEwNTkzOTQ5MX0.n77wsskoBcBZfjUXR91wrakU82zgfcM6o4JFKPzd344;
+var _db = null;
+function getDB() {
+  if (!_db && window.supabase && SB_URL.indexOf('YOUR_') !== 0) _db = window.supabase.createClient(SB_URL, SB_KEY);
+  return _db;
+}
+
+var allProducts = [];
+var activeCond  = '';
+var activeCat   = '';
+var currentProd = null;
+
+// ═══ LOAD PRODUCTS ═══
+async function loadProducts() {
+  var db = getDB();
+  var loadEl = document.getElementById('loadingState');
+  if (!db) {
+    loadEl.innerHTML = '<i class="fas fa-plug-circle-exclamation"></i><p>Store not connected yet. Add your Supabase URL and key in store.html to go live.</p>';
+    return;
+  }
+  var res = await db.from('products').select('*').order('created_at', {ascending: false});
+  loadEl.style.display = 'none';
+  document.getElementById('prodGrid').style.display = 'grid';
+  if (res.error || !res.data) {
+    document.getElementById('noResults').style.display = 'block';
+    document.getElementById('noResults').innerHTML = '<i class="fas fa-triangle-exclamation"></i><p>Failed to load products. Please refresh.</p>';
+    return;
+  }
+  allProducts = res.data;
+  populateBrandFilter();
+  var params = new URLSearchParams(window.location.search);
+  var cat = params.get('cat');
+  if (cat) {
+    activeCat = cat;
+    document.querySelectorAll('.cchip').forEach(function(c){ c.classList.toggle('active', c.dataset.cat === cat); });
+  }
+  doFilter();
+}
+
+function populateBrandFilter() {
+  var brands = Array.from(new Set(allProducts.map(function(p){ return p.brand; }).filter(Boolean))).sort();
+  var sel = document.getElementById('brandFilter');
+  brands.forEach(function(b) {
+    var o = document.createElement('option'); o.value = b; o.textContent = b; sel.appendChild(o);
+  });
+}
+
+// ═══ RENDER ═══
+function fmtP(n) { return '₦' + Number(n).toLocaleString('en-NG'); }
+
+function condInfo(c) {
+  if (c === 'new')     return {cls:'b-new',   label:'Brand New'};
+  if (c === 'uk-used') return {cls:'b-used',  label:'UK Used'};
+  return                      {cls:'b-refurb', label:'Refurbished'};
+}
+
+function renderProducts(list) {
+  var grid   = document.getElementById('prodGrid');
+  var noRes  = document.getElementById('noResults');
+  document.getElementById('resCount').textContent = list.length + ' product' + (list.length !== 1 ? 's' : '') + ' found';
+  if (!list.length) { grid.innerHTML = ''; noRes.style.display = 'block'; return; }
+  noRes.style.display = 'none';
+  grid.innerHTML = list.map(function(p) {
+    var ci = condInfo(p.condition);
+    var imgs = p.images && p.images.length ? p.images : [];
+    var imgHtml = '';
+    if (imgs.length) {
+      imgs.forEach(function(url, i) {
+        imgHtml += '<img src="' + url + '" class="' + (i === 0 ? 'active' : '') + '" alt="' + p.name + '" onerror="this.style.display=\'none\'">';
+      });
+    } else {
+      imgHtml = '<div class="no-img"><i class="fas fa-cube"></i></div>';
+    }
+    var arrows = imgs.length > 1
+      ? '<button class="carousel-arrow prev" onclick="carouselNav(\''+p.id+'\', -1, event)"><i class="fas fa-chevron-left"></i></button>' +
+        '<button class="carousel-arrow next" onclick="carouselNav(\''+p.id+'\', 1, event)"><i class="fas fa-chevron-right"></i></button>'
+      : '';
+    var dots = imgs.length > 1
+      ? '<div class="carousel-nav">' + imgs.map(function(_, i) {
+          return '<button class="carousel-dot' + (i === 0 ? ' active' : '') + '" onclick="carouselGo(\''+p.id+'\', '+i+', event)"></button>';
+        }).join('') + '</div>'
+      : '';
+    var topBadge = p.hot
+      ? '<span class="prod-badge b-hot"><i class="fas fa-fire"></i> Hot</span>'
+      : '<span class="prod-badge ' + ci.cls + '">' + ci.label + '</span>';
+    var soldOverlay = p.in_stock ? '' : '<div class="sold-overlay"><div class="sold-tag">SOLD OUT</div></div>';
+    var specs = (p.specs || []).slice(0,3).map(function(s) { return '<div class="spec-row"><i class="fas fa-check"></i>' + s + '</div>'; }).join('');
+    var oldP  = p.old_price ? '<span class="old-price">' + fmtP(p.old_price) + '</span>' : '';
+    var imgCount = imgs.length > 1 ? '<span class="img-count"><i class="fas fa-images"></i> ' + imgs.length + '</span>' : '';
+    var actions = p.in_stock
+      ? '<button class="btn btn-p btn-sm" onclick="openModal(\'' + p.id + '\')"><i class="fas fa-cart-shopping"></i> Order</button>' +
+        '<a href="https://wa.me/2348000000000?text=' + encodeURIComponent('Hi Kingsman, I\'m interested in ' + p.name + ' at ' + fmtP(p.price)) + '" target="_blank" class="btn btn-g btn-sm"><i class="fab fa-whatsapp"></i></a>'
+      : '<button class="btn btn-o btn-sm" disabled style="opacity:0.45;cursor:not-allowed;">Out of Stock</button>';
+    return '<div class="prod-card' + (p.in_stock ? '' : ' oos') + '" id="card-' + p.id + '">' +
+      '<div class="img-carousel" id="car-' + p.id + '" onclick="openQuickView(\'' + p.id + '\')">' + imgHtml + topBadge +
+      (p.category ? '<span class="cat-tag">' + p.category + '</span>' : '') +
+      '<span class="stock-dot ' + (p.in_stock ? 'dot-in' : 'dot-out') + '"></span>' +
+      soldOverlay + arrows + dots + '</div>' +
+      '<div class="prod-body">' +
+        '<div class="prod-brand">' + (p.brand||'') + '</div>' +
+        '<div class="prod-name" onclick="openQuickView(\'' + p.id + '\')" style="cursor:pointer;">' + p.name + '</div>' +
+        '<div class="prod-specs">' + specs + '</div>' +
+        '<div class="price-row"><span><span class="prod-price">' + fmtP(p.price) + '</span>' + oldP + '</span>' + imgCount + '</div>' +
+        '<div class="prod-actions">' + actions + '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+// ═══ CAROUSEL ═══
+function carouselNav(id, dir, e) {
+  e.stopPropagation();
+  var car = document.getElementById('car-' + id);
+  var imgs = car.querySelectorAll('img'); var dots = car.querySelectorAll('.carousel-dot');
+  var cur = Array.from(imgs).findIndex(function(i){ return i.classList.contains('active'); });
+  var next = (cur + dir + imgs.length) % imgs.length;
+  imgs[cur].classList.remove('active'); imgs[next].classList.add('active');
+  if (dots.length) { dots[cur].classList.remove('active'); dots[next].classList.add('active'); }
+}
+function carouselGo(id, idx, e) {
+  e.stopPropagation();
+  var car = document.getElementById('car-' + id);
+  var imgs = car.querySelectorAll('img'); var dots = car.querySelectorAll('.carousel-dot');
+  var cur = Array.from(imgs).findIndex(function(i){ return i.classList.contains('active'); });
+  imgs[cur].classList.remove('active'); imgs[idx].classList.add('active');
+  if (dots.length) { dots[cur].classList.remove('active'); dots[idx].classList.add('active'); }
+}
+
+// ═══ FILTER ═══
+function doFilter() {
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  var brand = document.getElementById('brandFilter').value;
+  var prR = document.getElementById('priceFilter').value;
+  var minP = 0, maxP = Infinity;
+  if (prR) { var parts = prR.split('-'); minP = Number(parts[0]); maxP = Number(parts[1]); }
+  var filtered = allProducts.filter(function(p) {
+    var mQ = !q || p.name.toLowerCase().includes(q) || (p.brand||'').toLowerCase().includes(q) || (p.specs || []).some(function(s){ return s.toLowerCase().includes(q); });
+    var mB = !brand || p.brand === brand;
+    var mC = !activeCond || p.condition === activeCond;
+    var mCat = !activeCat || p.category === activeCat;
+    var mP = p.price >= minP && p.price <= maxP;
+    return mQ && mB && mC && mCat && mP;
+  });
+  renderProducts(filtered);
+}
+function setCond(btn, cond) {
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+  btn.classList.add('active'); activeCond = cond; doFilter();
+}
+function setCat(btn, cat) {
+  document.querySelectorAll('.cchip').forEach(function(c){ c.classList.remove('active'); });
+  btn.classList.add('active'); activeCat = cat; doFilter();
+}
+
+// ═══ ORDER MODAL ═══
+function openModal(id) {
+  currentProd = allProducts.find(function(p){ return p.id === id; });
+  if (!currentProd) return;
+  document.getElementById('modalName').textContent = currentProd.name;
+  document.getElementById('modalPrice').textContent = fmtP(currentProd.price);
+  var thumb = document.getElementById('modalThumb');
+  thumb.innerHTML = (currentProd.images && currentProd.images[0]) ? '<img src="' + currentProd.images[0] + '" alt="">' : '<i class="fas fa-cube"></i>';
+  document.getElementById('orderModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  updateWA();
+}
+function closeModal() {
+  document.getElementById('orderModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('orderModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+['ord-name','ord-phone','ord-addr','ord-pay','ord-del','ord-notes'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) { el.addEventListener('input', updateWA); el.addEventListener('change', updateWA); }
+});
+function updateWA() {
+  if (!currentProd) return;
+  var name = document.getElementById('ord-name').value || '(not filled)';
+  var phone = document.getElementById('ord-phone').value || '(not filled)';
+  var addr = document.getElementById('ord-addr').value || '(not filled)';
+  var pay = document.getElementById('ord-pay').value;
+  var del_ = document.getElementById('ord-del').value;
+  var notes = document.getElementById('ord-notes').value;
+  var msg = 'Hi Kingsman Modern Gadgets, I want to order:\n\n*Product:* ' + currentProd.name + '\n*Price:* ' + fmtP(currentProd.price) + '\n\n*Name:* ' + name + '\n*Phone:* ' + phone + '\n*Delivery Address:* ' + addr + '\n*Payment:* ' + pay + '\n*Delivery Option:* ' + del_ + (notes ? '\n*Notes:* ' + notes : '');
+  document.getElementById('waBtn').href = 'https://wa.me/2348000000000?text=' + encodeURIComponent(msg);
+}
+function emailOrder() {
+  if (!currentProd) return;
+  var name = document.getElementById('ord-name').value;
+  var phone = document.getElementById('ord-phone').value;
+  if (!name || !phone) { showToast('Please enter your name and phone number.', false); return; }
+  var sub = 'Store Order: ' + currentProd.name;
+  var body = 'Product: ' + currentProd.name + '\nPrice: ' + fmtP(currentProd.price) + '\n\nName: ' + name + '\nPhone: ' + phone + '\nEmail: ' + document.getElementById('ord-email').value + '\nAddress: ' + document.getElementById('ord-addr').value + '\nPayment: ' + document.getElementById('ord-pay').value + '\nDelivery: ' + document.getElementById('ord-del').value + '\nNotes: ' + document.getElementById('ord-notes').value;
+  window.location.href = 'mailto:sales@kingsmangadgets.com?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(body);
+}
+
+// ═══ QUICK VIEW ═══
+var qvProd = null, qvIndex = 0;
+function openQuickView(id) {
+  qvProd = allProducts.find(function(p){ return p.id === id; });
+  if (!qvProd) return;
+  qvIndex = 0; renderQuickView();
+  document.getElementById('qvModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeQuickView() {
+  document.getElementById('qvModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderQuickView() {
+  var p = qvProd, imgs = p.images && p.images.length ? p.images : [];
+  var mainEl = document.getElementById('qvMain');
+  if (imgs.length) {
+    mainEl.innerHTML = imgs.map(function(url, i) {
+      return '<img src="' + url + '" class="' + (i === qvIndex ? 'active' : '') + '" alt="' + p.name + '">';
+    }).join('') +
+    (imgs.length > 1 ? '<button class="qv-main-arrow prev" onclick="qvNav(-1,event)"><i class="fas fa-chevron-left"></i></button><button class="qv-main-arrow next" onclick="qvNav(1,event)"><i class="fas fa-chevron-right"></i></button>' : '') +
+    '<span class="qv-zoom-hint"><i class="fas fa-magnifying-glass-plus"></i> Click to zoom</span>';
+  } else {
+    mainEl.innerHTML = '<div class="no-img"><i class="fas fa-cube"></i></div>';
+  }
+  var thumbsEl = document.getElementById('qvThumbs');
+  thumbsEl.innerHTML = imgs.length > 1 ? imgs.map(function(url, i) {
+    return '<div class="qv-thumb' + (i === qvIndex ? ' active' : '') + '" onclick="qvGo(' + i + ')"><img src="' + url + '" alt=""></div>';
+  }).join('') : '';
+  var ci = condInfo(p.condition);
+  var badges = p.hot ? '<span class="prod-badge b-hot"><i class="fas fa-fire"></i> Hot</span>' : '';
+  badges += '<span class="prod-badge ' + ci.cls + '">' + ci.label + '</span>';
+  document.getElementById('qvBadges').innerHTML = badges;
+  document.getElementById('qvBrand').textContent = p.brand || '';
+  document.getElementById('qvName').textContent = p.name;
+  document.getElementById('qvPrice').textContent = fmtP(p.price);
+  document.getElementById('qvOldPrice').textContent = p.old_price ? fmtP(p.old_price) : '';
+  var stockEl = document.getElementById('qvStock');
+  stockEl.className = 'qv-stock ' + (p.in_stock ? 'in' : 'out');
+  stockEl.innerHTML = p.in_stock ? '<i class="fas fa-circle-check"></i> In Stock' : '<i class="fas fa-circle-xmark"></i> Out of Stock';
+  document.getElementById('qvSpecs').innerHTML = (p.specs || []).map(function(s) {
+    return '<div class="qv-spec-row"><i class="fas fa-check"></i>' + s + '</div>';
+  }).join('');
+  document.getElementById('qvActions').innerHTML = p.in_stock
+    ? '<button class="btn btn-p btn-sm" onclick="closeQuickView();openModal(\'' + p.id + '\')"><i class="fas fa-cart-shopping"></i> Order Now</button>' +
+      '<a href="https://wa.me/2348000000000?text=' + encodeURIComponent('Hi Kingsman, I\'m interested in ' + p.name + ' at ' + fmtP(p.price)) + '" target="_blank" class="btn btn-g btn-sm"><i class="fab fa-whatsapp"></i> WhatsApp</a>'
+    : '<button class="btn btn-o btn-sm" disabled style="opacity:0.45;cursor:not-allowed;">Out of Stock</button>';
+}
+function qvNav(dir, e) { if (e) e.stopPropagation(); var imgs = qvProd.images || []; if (!imgs.length) return; qvIndex = (qvIndex + dir + imgs.length) % imgs.length; renderQuickView(); }
+function qvGo(i) { qvIndex = i; renderQuickView(); }
+document.getElementById('qvModal').addEventListener('click', function(e){ if (e.target === this) closeQuickView(); });
+
+// ═══ LIGHTBOX ═══
+function openLightbox() {
+  var imgs = (qvProd && qvProd.images) || [];
+  if (!imgs.length) return;
+  document.getElementById('lbImg').src = imgs[qvIndex];
+  var multi = imgs.length > 1;
+  document.getElementById('lbPrev').style.display = multi ? 'flex' : 'none';
+  document.getElementById('lbNext').style.display = multi ? 'flex' : 'none';
+  document.getElementById('lbOverlay').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lbOverlay').classList.remove('open'); }
+function lbNav(dir) {
+  var imgs = qvProd.images || []; if (!imgs.length) return;
+  qvIndex = (qvIndex + dir + imgs.length) % imgs.length;
+  document.getElementById('lbImg').src = imgs[qvIndex];
+  document.querySelectorAll('.qv-thumb').forEach(function(t,i){ t.classList.toggle('active', i===qvIndex); });
+  document.querySelectorAll('#qvMain img').forEach(function(im,i){ im.classList.toggle('active', i===qvIndex); });
+}
+document.getElementById('lbOverlay').addEventListener('click', function(e){ if (e.target === this) closeLightbox(); });
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('lbOverlay').classList.contains('open')) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+  } else if (document.getElementById('qvModal').classList.contains('open')) {
+    if (e.key === 'Escape') closeQuickView();
+    if (e.key === 'ArrowLeft') qvNav(-1);
+    if (e.key === 'ArrowRight') qvNav(1);
+  }
+});
+
+// ═══ TOAST ═══
+function showToast(msg, ok) {
+  if (ok === undefined) ok = true;
+  var t = document.getElementById('toast');
+  document.getElementById('t-icon').style.color = ok ? 'var(--green)' : 'var(--amber)';
+  document.getElementById('t-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3200);
+}
+
+// ═══ MOBILE MENU & THEME ═══
+var menuBtn = document.getElementById('menuBtn'), menuIcon = document.getElementById('menuIcon'), navMenu = document.getElementById('navMenu');
+menuBtn.addEventListener('click', function() {
+  var open = navMenu.classList.toggle('open');
+  menuIcon.className = open ? 'fas fa-times' : 'fas fa-bars';
+});
+navMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ navMenu.classList.remove('open'); menuIcon.className='fas fa-bars'; }); });
+var themeBtn = document.getElementById('themeBtn'), themeIcon = document.getElementById('themeIcon');
+function applyTheme(t) {
+  document.body.classList.toggle('light', t==='light');
+  themeIcon.className = t==='light' ? 'fas fa-moon' : 'fas fa-sun';
+  localStorage.setItem('kmg-theme', t);
+}
+var savedT = localStorage.getItem('kmg-theme');
+if (savedT) applyTheme(savedT);
+themeBtn.addEventListener('click', function(){ applyTheme(document.body.classList.contains('light')?'dark':'light'); });
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ═══ INIT ═══
+loadProducts();
+</script>
+</body>
+</html>

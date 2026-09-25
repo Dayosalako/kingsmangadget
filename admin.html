@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | Kingsman Modern Gadgets</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0D12'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23D3A24C' font-family='Georgia,serif'%3EK%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --bg:#0B0D12;--bg2:#12151C;--card:#171B24;--el:#1E2430;
+  --gold:#D3A24C;--gg:rgba(211,162,76,0.22);--gd:rgba(211,162,76,0.55);
+  --text:#F1EFEA;--text2:#9BA3AF;--muted:#5B6472;
+  --green:#3DDC84;--red:#F0554A;--amber:#F0A83B;
+  --br:rgba(211,162,76,0.13);--brh:rgba(211,162,76,0.32);
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;--disp:'Sora','Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.wrap{width:92%;max-width:1180px;margin:0 auto;}
+/* HEADER */
+.header{background:rgba(11,13,18,0.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:999;}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(150deg,var(--gold),#8a6423);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;color:#0B0D12;font-size:1rem;flex-shrink:0;}
+.logo-name{font-family:var(--disp);font-size:1.05rem;font-weight:700;line-height:1.1;}
+.logo-sub{font-size:0.6rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:6px;font-size:0.8rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;}
+.btn-p{background:var(--gold);color:#1A1305;}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 8px 20px var(--gg);}
+.btn-o{background:transparent;color:var(--gold);border:1px solid var(--gold);}
+.btn-o:hover{background:var(--gold);color:#1A1305;}
+.btn-sm{padding:7px 13px;font-size:0.75rem;}
+/* HERO */
+.page-hero{background:linear-gradient(150deg,#0B0D12 0%,#171310 55%,#12151C 100%);padding:36px 0 26px;border-bottom:1px solid var(--br);}
+.page-hero h1{font-family:var(--disp);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;margin-bottom:6px;}
+.page-hero p{color:var(--text2);font-size:0.88rem;}
+/* LOGIN SCREEN */
+.lscreen{position:fixed;inset:0;background:var(--bg);z-index:5000;display:none;align-items:center;justify-content:center;padding:20px;}
+.lscreen.show{display:flex;}
+.lbox{background:var(--card);border:1px solid var(--brh);border-radius:14px;padding:36px 30px;max-width:380px;width:100%;}
+.licon{width:56px;height:56px;border-radius:12px;background:linear-gradient(150deg,var(--gold),#8a6423);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:1.4rem;color:#0B0D12;margin:0 auto 16px;}
+.lbox h3{text-align:center;font-family:var(--disp);font-size:1.15rem;margin-bottom:4px;}
+.lsub{text-align:center;color:var(--text2);font-size:0.82rem;margin-bottom:22px;}
+.lerr{background:rgba(240,85,74,0.1);border:1px solid rgba(240,85,74,0.3);color:var(--red);font-size:0.8rem;padding:9px 12px;border-radius:6px;margin-bottom:14px;display:none;}
+.lerr.show{display:block;}
+.lnote{font-size:0.72rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5;}
+/* CARDS & FORMS */
+.admin-body{padding:28px 0 70px;}
+.card{background:var(--card);border:1px solid var(--br);border-radius:10px;padding:22px;margin-bottom:20px;}
+.card h3{font-family:var(--disp);font-size:1rem;margin-bottom:18px;display:flex;align-items:center;gap:9px;}
+.card h3 i{color:var(--gold);}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+@media(max-width:700px){.g3{grid-template-columns:1fr;}}
+.stat-sm{background:var(--card);border:1px solid var(--br);border-radius:10px;padding:16px 18px;}
+.sv{font-family:var(--disp);font-size:1.6rem;font-weight:700;color:var(--gold);}
+.sl{font-size:0.76rem;color:var(--text2);margin-top:2px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:6px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;background:var(--el);border:1px solid var(--br);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:0.88rem;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gg);}
+.fg textarea{resize:vertical;min-height:80px;}
+select option{background:var(--card);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.r2{grid-template-columns:1fr;}}
+.acts{display:flex;gap:10px;margin-top:6px;}
+/* TABLE */
+.dtbl{width:100%;border-collapse:collapse;font-size:0.84rem;}
+.dtbl th{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--gold);padding:9px 8px;text-align:left;border-bottom:1px solid var(--br);white-space:nowrap;}
+.dtbl td{padding:10px 8px;border-bottom:1px solid var(--br);vertical-align:middle;}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.68rem;font-weight:600;}
+.bg{background:rgba(61,220,132,0.12);color:var(--green);}
+.br_{background:rgba(240,85,74,0.12);color:var(--red);}
+.bb{background:var(--gg);color:var(--gold);}
+.icon-btn{background:none;border:1px solid var(--br);color:var(--text2);width:30px;height:30px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold);}
+.icon-btn.rd:hover{border-color:var(--red);color:var(--red);}
+.icon-btn.gn:hover{border-color:var(--green);color:var(--green);}
+.ra{display:flex;gap:6px;}
+.empty{text-align:center;padding:34px 20px;color:var(--muted);}
+.empty i{font-size:1.8rem;display:block;margin-bottom:10px;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--brh);border-radius:8px;padding:13px 20px;font-size:0.85rem;z-index:3000;transition:transform .3s;box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.setup-banner{background:rgba(240,168,59,0.1);border:1px solid rgba(240,168,59,0.35);color:var(--amber);padding:14px 18px;border-radius:8px;font-size:0.83rem;margin-bottom:20px;display:none;}
+.setup-banner.show{display:block;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="lscreen" id="lscreen">
+  <div class="lbox">
+    <div class="licon">K</div>
+    <h3>Admin Sign In</h3>
+    <p class="lsub">Kingsman Modern Gadgets — Product Manager</p>
+    <div class="lerr" id="lerr"></div>
+    <div class="fg"><label>Email</label><input type="email" id="l-email" placeholder="your@email.com" autocomplete="email"></div>
+    <div class="fg"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:6px;" id="lbtn" onclick="doLogin()"><i class="fas fa-right-to-bracket"></i> Sign In</button>
+    <p class="lnote">Connected to Supabase Auth. If no Supabase project is configured yet, the first email/password you enter here becomes your local admin login (for testing only — connect Supabase before going live).</p>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap nav-wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">K</div>
+      <div><div class="logo-name">Kingsman</div><div class="logo-sub">Admin Panel</div></div>
+    </a>
+    <button class="btn btn-o btn-sm" onclick="doLogout()"><i class="fas fa-right-from-bracket"></i> Sign Out</button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <h1>Product Manager</h1>
+    <p>Add, edit and publish products to the Kingsman Modern Gadgets store.</p>
+  </div>
+</section>
+
+<div class="admin-body">
+  <div class="wrap">
+    <div class="setup-banner" id="setupBanner"><i class="fas fa-triangle-exclamation"></i> This admin panel isn't connected to a database yet. Open this file, find <code>SB_URL</code> / <code>SB_KEY</code> near the bottom, and paste in your Supabase project credentials — see the included SETUP.md for step-by-step instructions.</div>
+
+    <div class="g3">
+      <div class="stat-sm"><div class="sv" id="st-tot">0</div><div class="sl">Total Products</div></div>
+      <div class="stat-sm"><div class="sv" id="st-in">0</div><div class="sl">In Stock</div></div>
+      <div class="stat-sm"><div class="sv" id="st-out">0</div><div class="sl">Sold Out</div></div>
+    </div>
+
+    <div class="card" id="pform">
+      <h3 id="pform-title"><i class="fas fa-plus-circle"></i> Add New Product</h3>
+      <input type="hidden" id="p-eid">
+      <div class="r2">
+        <div class="fg"><label>Category</label>
+          <select id="p-cat">
+            <option>Laptops</option>
+            <option>Desktops & PCs</option>
+            <option>Phones</option>
+            <option>Accessories</option>
+          </select>
+        </div>
+        <div class="fg"><label>Condition</label>
+          <select id="p-cond"><option value="new">Brand New</option><option value="uk-used">UK Used</option><option value="refurb">Refurbished</option></select>
+        </div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Brand</label>
+          <select id="p-brand"><option>Apple</option><option>HP</option><option>Dell</option><option>Lenovo</option><option>Asus</option><option>Acer</option><option>Samsung</option><option>Infinix</option><option>Tecno</option><option>Xiaomi</option><option>Microsoft</option><option>Other</option></select>
+        </div>
+        <div class="fg"><label>Product Name</label><input id="p-name" placeholder="e.g. HP EliteBook 840 G8"></div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Selling Price (₦)</label><input type="number" id="p-price" placeholder="185000" min="0"></div>
+        <div class="fg"><label>Crossed / Old Price (₦) — optional</label><input type="number" id="p-oldp" placeholder="Leave blank if none" min="0"></div>
+      </div>
+      <div class="fg"><label>Specifications — one per line</label>
+        <textarea id="p-specs" placeholder="Intel Core i5-11th Gen&#10;8GB RAM · 256GB SSD&#10;14&quot; FHD Display&#10;Windows 11 Pro"></textarea>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Stock Status</label>
+          <select id="p-stock"><option value="true">In Stock</option><option value="false">Sold Out</option></select>
+        </div>
+        <div class="fg"><label>Mark as Hot / Featured?</label>
+          <select id="p-hot"><option value="false">No</option><option value="true">Yes — Show Hot Badge</option></select>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Product Images (up to 5) — click to add</label>
+        <label for="p-imgfile" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--el);border:1px dashed var(--brh);border-radius:6px;cursor:pointer;color:var(--gold);font-size:0.8rem;transition:all .2s;">
+          <i class="fas fa-cloud-upload-alt" style="font-size:1.1rem;"></i> Choose Images
+        </label>
+        <input type="file" id="p-imgfile" accept="image/*" multiple style="display:none;" onchange="handleImageSelect(this)">
+        <div id="img-previews" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;min-height:30px;">
+          <div style="color:var(--muted);font-size:0.8rem;padding:12px 0;">No images selected yet</div>
+        </div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:6px;">Images with a gold border are new (not yet saved). Images without a border are already saved.</div>
+      </div>
+      <div class="acts">
+        <button class="btn btn-p btn-sm" id="p-savebtn" onclick="saveProd()"><i class="fas fa-save"></i> <span id="p-slbl">Save Product</span></button>
+        <button class="btn btn-o btn-sm" onclick="cancelProd()"><i class="fas fa-times"></i> Cancel</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><i class="fas fa-list"></i> Product Inventory</h3>
+      <div style="overflow-x:auto;">
+        <table class="dtbl">
+          <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Brand</th><th>Condition</th><th>Price</th><th>Stock</th><th>Hot</th><th>Actions</th></tr></thead>
+          <tbody id="prod-body"><tr><td colspan="9"><div class="empty"><i class="fas fa-box-open"></i>No products yet</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle" id="t-icon" style="color:var(--green);margin-right:7px;"></i><span id="t-msg"></span></div>
+
+<script>
+// ═══ SUPABASE — REPLACE WITH YOUR OWN PROJECT CREDENTIALS (see SETUP.md) ═══
+var SB_URL = sb_publishable_XOzUt4IvLqO1B17OBcSN6w_0kOMOwQT;
+var SB_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbmh6amVldXZsd3l0d3lubG1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNjM0OTEsImV4cCI6MjEwNTkzOTQ5MX0.n77wsskoBcBZfjUXR91wrakU82zgfcM6o4JFKPzd344;
+var _db = null;
+function getDB() {
+  if (!_db && window.supabase && SB_URL.indexOf('YOUR_') !== 0) _db = window.supabase.createClient(SB_URL, SB_KEY);
+  return _db;
+}
+function toast(msg, ok) {
+  if (ok === undefined) ok = true;
+  var t = document.getElementById('toast');
+  document.getElementById('t-icon').style.color = ok ? 'var(--green)' : 'var(--amber)';
+  document.getElementById('t-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3200);
+}
+
+// ═══ LOGIN / SESSION ═══
+var lscreen = document.getElementById('lscreen');
+
+async function checkSession() {
+  if (!getDB()) {
+    document.getElementById('setupBanner').classList.add('show');
+  }
+  var saved = localStorage.getItem('kmg-admin-auth');
+  if (saved === 'true') {
+    lscreen.classList.remove('show');
+    loadStoreProducts();
+  } else {
+    lscreen.classList.add('show');
+  }
+}
+
+async function doLogin() {
+  var email = document.getElementById('l-email').value.trim();
+  var pass = document.getElementById('l-pass').value;
+  var btn = document.getElementById('lbtn');
+  var err = document.getElementById('lerr');
+  err.classList.remove('show');
+  if (!email || !pass) { err.textContent = 'Please enter your email and password.'; err.classList.add('show'); return; }
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+  btn.disabled = true;
+
+  var db = getDB();
+  if (db) {
+    var res = await db.auth.signInWithPassword({ email: email, password: pass });
+    if (!res.error && res.data.user) {
+      localStorage.setItem('kmg-admin-auth', 'true');
+      lscreen.classList.remove('show');
+      btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign In';
+      btn.disabled = false;
+      loadStoreProducts();
+      return;
+    }
+    err.textContent = res.error ? res.error.message : 'Sign in failed.';
+    err.classList.add('show');
+    btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign In';
+    btn.disabled = false;
+    return;
+  }
+
+  // Fallback: local password check (only used when Supabase isn't configured yet)
+  var stored = localStorage.getItem('kmg-admin-pass');
+  if (stored && pass === stored) {
+    localStorage.setItem('kmg-admin-auth', 'true');
+    lscreen.classList.remove('show');
+  } else if (!stored) {
+    localStorage.setItem('kmg-admin-auth', 'true');
+    localStorage.setItem('kmg-admin-pass', pass);
+    localStorage.setItem('kmg-admin-email', email);
+    lscreen.classList.remove('show');
+  } else {
+    err.textContent = 'Incorrect password.';
+    err.classList.add('show');
+  }
+  btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign In';
+  btn.disabled = false;
+  loadStoreProducts();
+}
+
+async function doLogout() {
+  var db = getDB();
+  if (db) { try { await db.auth.signOut(); } catch(e){} }
+  localStorage.removeItem('kmg-admin-auth');
+  lscreen.classList.add('show');
+}
+document.getElementById('l-pass').addEventListener('keydown', function(e){ if (e.key==='Enter') doLogin(); });
+
+// ═══ PRODUCTS ═══
+var storeProds = [];
+var selectedFiles = [];
+var currentEditImages = [];
+var currentEditId = null;
+
+async function loadStoreProducts() {
+  var db = getDB();
+  var tbody = document.getElementById('prod-body');
+  if (!db) { tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-plug-circle-exclamation"></i>Connect Supabase to manage products (see SETUP.md).</div></td></tr>'; return; }
+  tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-circle-notch fa-spin"></i>Loading...</div></td></tr>';
+  var res = await db.from('products').select('*').order('created_at', {ascending: false});
+  if (res.error || !res.data) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-triangle-exclamation"></i>Failed to load: ' + (res.error ? res.error.message : 'unknown error') + '</div></td></tr>';
+    return;
+  }
+  storeProds = res.data;
+  renderStoreTable();
+}
+
+function renderStoreTable() {
+  var prods = storeProds;
+  var inSt = prods.filter(function(p){ return p.in_stock; }).length;
+  document.getElementById('st-tot').textContent = prods.length;
+  document.getElementById('st-in').textContent = inSt;
+  document.getElementById('st-out').textContent = prods.length - inSt;
+  var tbody = document.getElementById('prod-body');
+  if (!prods.length) { tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-box-open"></i>No products yet. Add one above.</div></td></tr>'; return; }
+  var cL = {'new':'New','uk-used':'UK Used','refurb':'Refurb'};
+  tbody.innerHTML = prods.map(function(p, i) {
+    var thumb = (p.images && p.images[0]) ? '<img src="'+p.images[0]+'" style="width:42px;height:34px;object-fit:cover;border-radius:4px;border:1px solid var(--br);">' : '<i class="fas fa-cube" style="color:var(--gold);font-size:1.1rem;"></i>';
+    return '<tr>' +
+      '<td style="color:var(--gold);font-family:var(--mono);font-size:0.77rem;">'+(i+1)+'</td>' +
+      '<td><div style="display:flex;align-items:center;gap:10px;">' + thumb +
+        '<div><div style="font-weight:600;font-size:0.84rem;">'+p.name+'</div>' +
+        '<div style="font-size:0.7rem;color:var(--muted);">'+(p.images?p.images.length:0)+' image(s)</div></div></div></td>' +
+      '<td style="font-size:0.78rem;color:var(--text2);">'+(p.category||'—')+'</td>' +
+      '<td>'+(p.brand||'—')+'</td>' +
+      '<td><span class="badge bb">'+(cL[p.condition]||p.condition||'—')+'</span></td>' +
+      '<td style="color:var(--gold);font-weight:600;font-size:0.84rem;">₦'+Number(p.price).toLocaleString('en-NG')+(p.old_price?'<br><span style="color:var(--muted);font-size:0.7rem;text-decoration:line-through;">₦'+Number(p.old_price).toLocaleString('en-NG')+'</span>':'')+'</td>' +
+      '<td><span class="badge '+(p.in_stock?'bg':'br_')+'">'+(p.in_stock?'In Stock':'Sold Out')+'</span></td>' +
+      '<td style="text-align:center;">'+(p.hot?'🔥':'—')+'</td>' +
+      '<td><div class="ra">' +
+        '<button class="icon-btn" onclick="openProdEdit(\''+p.id+'\')" title="Edit"><i class="fas fa-edit"></i></button>' +
+        '<button class="icon-btn '+(p.in_stock?'rd':'gn')+'" onclick="toggleProdStock(\''+p.id+'\','+p.in_stock+')" title="'+(p.in_stock?'Mark Sold Out':'Mark In Stock')+'"><i class="fas fa-'+(p.in_stock?'ban':'check')+'"></i></button>' +
+        '<button class="icon-btn rd" onclick="delProd(\''+p.id+'\')" title="Delete"><i class="fas fa-trash"></i></button>' +
+      '</div></td></tr>';
+  }).join('');
+}
+
+function handleImageSelect(input) {
+  var files = Array.from(input.files);
+  var existing = selectedFiles.length + currentEditImages.length;
+  if (existing + files.length > 5) { toast('Maximum 5 images allowed. Select fewer.', false); input.value=''; return; }
+  files.forEach(function(f){ selectedFiles.push(f); });
+  renderImagePreviews();
+  input.value = '';
+}
+
+function renderImagePreviews() {
+  var wrap = document.getElementById('img-previews');
+  if (!selectedFiles.length && !currentEditImages.length) {
+    wrap.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;padding:12px 0;">No images selected yet</div>';
+    return;
+  }
+  var html = '';
+  currentEditImages.forEach(function(url, i) {
+    html += '<div style="position:relative;display:inline-block;margin:4px;">' +
+      '<img src="'+url+'" style="width:80px;height:60px;object-fit:cover;border-radius:5px;border:1px solid var(--brh);">' +
+      '<button onclick="removeExistingImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:0.65rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button></div>';
+  });
+  selectedFiles.forEach(function(f, i) {
+    var url = URL.createObjectURL(f);
+    html += '<div style="position:relative;display:inline-block;margin:4px;">' +
+      '<img src="'+url+'" style="width:80px;height:60px;object-fit:cover;border-radius:5px;border:2px solid var(--gold);">' +
+      '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(211,162,76,0.85);color:#1A1305;font-size:0.55rem;text-align:center;padding:2px;font-weight:700;">NEW</div>' +
+      '<button onclick="removeNewImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:0.65rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button></div>';
+  });
+  wrap.innerHTML = html;
+}
+function removeExistingImg(idx) { currentEditImages.splice(idx,1); renderImagePreviews(); }
+function removeNewImg(idx) { selectedFiles.splice(idx,1); renderImagePreviews(); }
+
+async function saveProd() {
+  var db = getDB();
+  if (!db) { toast('Connect Supabase first — see SETUP.md.', false); return; }
+  var eid = currentEditId;
+  var name = document.getElementById('p-name').value.trim();
+  var price = parseFloat(document.getElementById('p-price').value);
+  if (!name) { toast('Product name is required.', false); return; }
+  if (!price) { toast('Price is required.', false); return; }
+
+  var btn = document.getElementById('p-savebtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  try {
+    var uploadedUrls = [];
+    for (var i = 0; i < selectedFiles.length; i++) {
+      var f = selectedFiles[i];
+      var ext = f.name.split('.').pop();
+      var path = 'products/' + Date.now() + '_' + i + '.' + ext;
+      var up = await db.storage.from('product-images').upload(path, f, {upsert: true});
+      if (up.error) { toast('Image upload failed: ' + up.error.message, false); btn.innerHTML = '<i class="fas fa-save"></i> <span id="p-slbl">Save Product</span>'; btn.disabled = false; return; }
+      var pub = db.storage.from('product-images').getPublicUrl(path);
+      uploadedUrls.push(pub.data.publicUrl);
+    }
+    var allImages = currentEditImages.concat(uploadedUrls);
+    var opv = document.getElementById('p-oldp').value;
+    var data = {
+      category:  document.getElementById('p-cat').value,
+      brand:     document.getElementById('p-brand').value,
+      name:      name,
+      condition: document.getElementById('p-cond').value,
+      price:     price,
+      old_price: opv ? parseFloat(opv) : null,
+      specs:     document.getElementById('p-specs').value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean),
+      in_stock:  document.getElementById('p-stock').value === 'true',
+      hot:       document.getElementById('p-hot').value === 'true',
+      images:    allImages
+    };
+    var res;
+    if (eid) {
+      res = await db.from('products').update(data).eq('id', eid);
+      if (!res.error) toast('Product updated.');
+    } else {
+      res = await db.from('products').insert(data);
+      if (!res.error) toast('Product added to store.');
+    }
+    if (res.error) { toast('Error: ' + res.error.message, false); }
+    else {
+      btn.innerHTML = '<i class="fas fa-save"></i> <span id="p-slbl">Save Product</span>';
+      btn.disabled = false;
+      cancelProd();
+      loadStoreProducts();
+      return;
+    }
+  } catch(e) { toast('Unexpected error: ' + e.message, false); }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> <span id="p-slbl">Save Product</span>';
+  btn.disabled = false;
+}
+
+function openProdEdit(id) {
+  var p = storeProds.find(function(x){ return x.id === id; });
+  if (!p) return;
+  currentEditId = p.id;
+  currentEditImages = p.images ? p.images.slice() : [];
+  selectedFiles = [];
+  document.getElementById('p-eid').value = p.id;
+  document.getElementById('p-cat').value = p.category || 'Laptops';
+  document.getElementById('p-brand').value = p.brand || 'Other';
+  document.getElementById('p-cond').value = p.condition || 'new';
+  document.getElementById('p-name').value = p.name;
+  document.getElementById('p-price').value = p.price;
+  document.getElementById('p-oldp').value = p.old_price || '';
+  document.getElementById('p-specs').value = (p.specs || []).join('\n');
+  document.getElementById('p-stock').value = String(p.in_stock);
+  document.getElementById('p-hot').value = String(p.hot);
+  document.getElementById('pform-title').innerHTML = '<i class="fas fa-edit"></i> Editing: ' + p.name;
+  document.getElementById('p-slbl').textContent = 'Update Product';
+  renderImagePreviews();
+  document.getElementById('pform').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function cancelProd() {
+  currentEditId = null; currentEditImages = []; selectedFiles = [];
+  document.getElementById('p-eid').value = '';
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-price').value = '';
+  document.getElementById('p-oldp').value = '';
+  document.getElementById('p-specs').value = '';
+  document.getElementById('p-stock').value = 'true';
+  document.getElementById('p-hot').value = 'false';
+  document.getElementById('p-brand').value = 'Apple';
+  document.getElementById('p-cond').value = 'new';
+  document.getElementById('p-cat').value = 'Laptops';
+  document.getElementById('pform-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
+  document.getElementById('p-slbl').textContent = 'Save Product';
+  renderImagePreviews();
+}
+
+async function delProd(id) {
+  if (!confirm('Delete this product permanently?')) return;
+  var db = getDB();
+  var res = await db.from('products').delete().eq('id', id);
+  if (!res.error) { toast('Product deleted.'); loadStoreProducts(); }
+  else toast('Error deleting: ' + res.error.message, false);
+}
+
+async function toggleProdStock(id, current) {
+  var db = getDB();
+  var res = await db.from('products').update({in_stock: !current}).eq('id', id);
+  if (!res.error) { toast(!current ? 'Marked In Stock.' : 'Marked Sold Out.'); loadStoreProducts(); }
+  else toast('Error.', false);
+}
+
+// ═══ INIT ═══
+checkSession();
+</script>
+</body>
+</html>
